@@ -17,7 +17,7 @@ def crear_archivo(contenido: List[str]) -> None:
     """
     Crea un archivo 'Llave.txt' escribiendo las líneas proporcionadas.
     """
-    with open('Llave.txt', 'w') as archivo:
+    with open('Files\Llave.txt', 'w') as archivo:
         archivo.writelines(contenido)
     print("[INFO] Se creó correctamente el archivo de la contraseña: 'Llave.txt'.")
 
@@ -27,7 +27,7 @@ def crear_archivo_cambios(pixels: List[List[int]], filas: int, ancho: int, len_t
     Crea un archivo 'cambios.txt' escribiendo información basada en los píxeles.
     """
     total_pixeles_mensaje = len_texto + 8
-    with open('cambios.txt', 'w') as cambios:
+    with open('Files\cambios.txt', 'w') as cambios:
         # Primera línea del archivo con los primeros 88 píxeles
         cambios.write(f"{pixels[0][0:88]}\n")
         
