@@ -49,7 +49,7 @@ def bin_to_dec(arr: list) -> list:
     """
     return [
         [
-            binToDecCache.setdefault(value, int(value, 2)) for value in pixel
+            binToDecCache.setdefault(str(value), int(str(value), 2)) for value in pixel
         ]
         for pixel in arr
     ]
