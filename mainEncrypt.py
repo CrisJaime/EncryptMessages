@@ -3,6 +3,7 @@ import convertions
 import processImg
 import key
 import manipulation
+import createImg
 
 inicio = time.time()
 
@@ -36,7 +37,7 @@ pixelsPassMod = pixelsIndicadoresDec + \
 pixels[0][0:88] = pixelsPassMod
 
 # Text processing
-textEncrypt = "Hola esto es una prueba para encriptar un mensaje en una imagen"
+textEncrypt = "Hola esto es una prueba para encriptar"
 textToList = list(textEncrypt)
 textASCII = convertions.convert_ascii(textToList)# Texto convertido en ASCII
 textBin =  convertions.dec_to_bin(textASCII)# Texto convertido en binario
@@ -44,6 +45,20 @@ textBin =  convertions.dec_to_bin(textASCII)# Texto convertido en binario
 totalBitsText= len(textBin)*8# Total de bits
 totalPixelsText= round(totalBitsText/3 +1/3)
 
+#Create pixels
+pixelModDec= manipulation.manipulacion_texto(pixels,textBin,totalPixelsText)
+finalPixels= createImg.insertar_mensaje_en_pixeles(pixels,pixelModDec,totalPixelsText,pixelsIndicadoresDec,ancho,alto)
+
+#Crear archivo cambios
+totalFilas=round((totalPixelsText/ancho)+0.5)
+key.crear_archivo_cambios(pixels,totalFilas,ancho,totalPixelsText)
+
+#Create new Img
+ImgMod= createImg.crear_imagen(pixels,img,ancho,alto)
+ImgMod.save('IMG\\ImagenModificada.jpg')
+
+
+print("---"*10)
 print(f"[INFO] Contraseña en ASCII: {asciiPass}")
 print(f"[INFO] Total de Pixels: {totalPixels}")
 print(f"[INFO] Total de Caracteres por Fila: {len(pixels)*3//8}")
