@@ -86,6 +86,6 @@ def crear_archivo_cambios(pixels: List[List[int]], filas: int, ancho: int, len_t
                 texto = pixels[i + 1][0:total_pixeles_mensaje]  # Take the necessary pixels from the current row
                 total_pixeles_mensaje -= ancho  # Reduce the remaining total by the processed width
             else:
-                texto = pixels[i + 1]  # Use all pixels from the current row
+                texto = pixels[i + 1][0:total_pixeles_mensaje]  # Use all pixels from the current row
             cambios.write(str(texto))  # Write the pixels to the file
     print("[INFO] 'cambios.txt' file created successfully.")

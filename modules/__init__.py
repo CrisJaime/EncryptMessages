@@ -14,3 +14,6 @@ from modules import manipulation
 
 # The 'createImg' module, likely used for creating or modifying images based on pixel data.
 from modules import createImg
+
+# The 'stego_utils' module, provides utility functions for embedding, extracting and processing hidden messages.
+from modules import stego_utils

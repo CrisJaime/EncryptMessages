@@ -103,7 +103,7 @@ def crear_imagen(pixels, imagen_original, ancho, alto):
     
     # Display the images
     print("[INFO] New image created")
-    nueva_imagen.show()
-    imagen_original.show()
+    # nueva_imagen.show()
+    # imagen_original.show()
     
     return nueva_imagen
