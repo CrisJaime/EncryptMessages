@@ -4,33 +4,19 @@ decToBinCache = {}
 coloToBinCache = {}
 binToDecCache = {}
 
-# Convert ASCII characters
-def convert_ascii(contra: str) -> list:
+# Convert characters to binary directly
+def char_to_bin(text: str) -> list:
     """
-    Converts a string into a list of ASCII values.
-    Uses a cache to avoid recalculating already processed values.
+    Converts a string into a list of 8-bit binary values.
 
     Args:
-        contra (str): String to convert.
+        text (str): String to convert.
 
     Returns:
-        list: List of ASCII values corresponding to each character in the string.
+        list: List of 8-bit binary strings corresponding to each character in the string.
     """
-    return [convertASCIICache.setdefault(c, ord(c)) for c in contra]
+    return [format(ord(c), '08b') for c in text]
 
-# Convert decimals to binary
-def dec_to_bin(ascii_vals: list) -> list:
-    """
-    Converts a list of decimal (ASCII) values into a list of binary
-    8-bit values, using a cache for optimization.
-
-    Args:
-        ascii_vals (list): List of decimal (ASCII) values.
-
-    Returns:
-        list: List of 8-bit binary strings representing the decimal values.
-    """
-    return [decToBinCache.setdefault(a, format(a, '08b')) for a in ascii_vals]
 
 # Convert RGB colors to binary
 def color_to_bin(arr: list, ancho: int, alto: int) -> list:
