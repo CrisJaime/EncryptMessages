@@ -55,7 +55,6 @@ def manipular_indicadores(matrix, indicadores):
             x = pixeles_bits[i]  # Modifies the corresponding byte in the pixels.
             x[7] = bit
             pixeles_bits_mod.append(int(''.join(x)))  # Converts the modified byte to integer.
-
     return pixeles_bits_mod
 
 def crear_pixeles(arr):
@@ -198,3 +197,9 @@ def manipulacion_texto(mat, mensaje, pixeles):
     PixelsModBin = crear_pixeles(aux)  # Converts to binary format.
     PixelsModDec = convertions.bin_to_dec(PixelsModBin)  # Converts to decimal format.
     return PixelsModDec
+
+
+def lsb_values(bin_vals: list)-> list:
+    lsb_values = [binary[-1] for binary in bin_vals]
+    return lsb_values
+    

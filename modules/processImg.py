@@ -55,6 +55,7 @@ def extraer_canales(imagen: Image.Image):
         for y in range(height)  # Iterate through each row (image height)
     ]
     total_pixels = width * height  # Calculate the total number of pixels
+    print(f"[INFO] First 8 pixels before password indicators: \n{matrix[0][:8]}")
     return matrix, total_pixels, width, height
 
 # Create and display a new image from processed pixels
