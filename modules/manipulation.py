@@ -141,7 +141,26 @@ def separacion_texto(mensaje, pixeles):
         aux.append(bb)
     return aux
 
-def manipulacion_texto(mat, mensaje, pixeles):
+def procesar_mensaje(mensajePosicionSeparado,mensajeSeparadoBin):
+    aux = []
+    a, b = 0, 0
+    
+    while a < len(mensajePosicionSeparado):
+        byte = mensajePosicionSeparado[a]
+        contador = a // 8
+        
+        if contador < len(mensajeSeparadoBin):
+            mensajebyte = mensajeSeparadoBin[contador]
+            bit = mensajebyte[b]
+            byte[7] = bit  # Modifica el último bit del byte
+        
+        aux.append(int(''.join(byte)))  # Convierte la lista de caracteres en un número
+        b = (b + 1) % 8
+        a += 1
+    
+    return aux
+
+def manipulacion_texto(mat, mensaje, pixels):
     """
     Modifies a pixel matrix to embed a binary message.
     
@@ -153,52 +172,43 @@ def manipulacion_texto(mat, mensaje, pixeles):
     Returns:
         list: Modified pixel matrix.
     """
-    sizeMat = len(mat[0])  # Width of the image.
-    mensajeSeparado = [list(m) for m in mensaje]
-    aux = []
-
-    if pixeles < sizeMat:
+    columns = len(mat[0])  # image_width of the image.
+    #rows= len(mat) # image_height of the image. 
+    mensajeSeparadoBin = [list(m) for m in mensaje] #Mensaje separado en Binario
+    totalRows=int(pixels/columns)
+    # print(pixels,columns,totalRows)
+    
+    aux = []  # Lista para almacenar el resultado de procesar_mensaje
+    
+    if pixels < columns:
         # Case 1: The message fits in a single row.
-        mensajePosicion = mat[1][:pixeles]
-        mensajePosicionSeparado = separacion_texto(mensajePosicion, pixeles)
-
-        a, b = 0, 0
-        while a < len(mensajePosicionSeparado):
-            byte = mensajePosicionSeparado[a]
-            contador = a // 8
-            if contador < len(mensajeSeparado):
-                mensajebyte = mensajeSeparado[contador]
-                bit = mensajebyte[b]
-                byte[7] = bit
-            aux.append(int(''.join(byte)))
-            b = (b + 1) % 8
-            a += 1
-    else:
+        mensajePosicion = mat[1][:pixels]
+        mensajePosicionSeparado = separacion_texto(mensajePosicion, pixels)
+        aux=procesar_mensaje(mensajePosicionSeparado,mensajeSeparadoBin)
+    else: 
         # Case 2: The message spans multiple rows.
-        totalDeFilas = -(-pixeles // sizeMat)  # Round up.
-        for i in range(totalDeFilas):
-            fila_pixeles = min(sizeMat, pixeles)
-            mensajePosicion = mat[i + 1][:fila_pixeles]
-            mensajePosicionSeparado = separacion_texto(mensajePosicion, fila_pixeles)
-
-            a, b = 0, 0
-            while a < len(mensajePosicionSeparado):
-                byte = mensajePosicionSeparado[a]
-                contador = a // 8
-                if contador < len(mensajeSeparado):
-                    mensajebyte = mensajeSeparado[contador]
-                    bit = mensajebyte[b]
-                    byte[7] = bit
-                aux.append(int(''.join(byte)))
-                b = (b + 1) % 8
-                a += 1
-            pixeles -= sizeMat
-
+        totalPixels=pixels
+        for i in range(1,totalRows+2):
+            if totalPixels > columns:
+                mensajePosicion=mat[i][:columns]
+                mensajePosicionSeparado = separacion_texto(mensajePosicion,columns)
+            else:
+                mensajePosicion=mat[i][:totalPixels]
+                mensajePosicionSeparado = separacion_texto(mensajePosicion,totalPixels)
+            # print(totalPixels,i,len(mensajePosicion),len(mensajePosicionSeparado))
+            
+            # Acumular los resultados en aux
+            aux.extend(procesar_mensaje(mensajePosicionSeparado, mensajeSeparadoBin))
+            
+            totalPixels=pixels-columns
+    
     PixelsModBin = crear_pixeles(aux)  # Converts to binary format.
-    PixelsModDec = convertions.bin_to_dec(PixelsModBin)  # Converts to decimal format.
+    PixelsModDec = convertions.bin_to_dec(PixelsModBin)  # Converts to decimal format.  
+    
+    # print(mat[1][:10])
+    # print(PixelsModDec[:10])
     return PixelsModDec
-
-
+    
 def lsb_values(bin_vals: list)-> list:
     lsb_values = [binary[-1] for binary in bin_vals]
     return lsb_values
