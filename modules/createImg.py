@@ -107,3 +107,29 @@ def crear_imagen(pixels, imagen_original, ancho, alto):
     # imagen_original.show()
     
     return nueva_imagen
+
+
+def final_pixels(pixels,textPixels,columns):
+    totalColumns=len(textPixels)
+    totalRows=totalColumns/columns
+    if totalRows<1:
+        # print(pixels[1][0:10])
+        pixels[1][0:len(textPixels)]=textPixels
+        # print(pixels[1][0:10])
+    else:
+        for i in range(1,round(totalRows)+2):
+            residualColumns=len(textPixels)
+            # print(residualColumns)
+            if residualColumns>columns:
+                # print(pixels[i][0:10])
+                pixels[i]=textPixels[0:columns] 
+                # print(pixels[i][0:10])
+                del textPixels[:columns]
+            else:
+                # print(pixels[i][residualColumns-3:residualColumns+3])
+                pixels[i][0:residualColumns]=textPixels
+                # print(pixels[i][residualColumns-3:residualColumns+3])
+    
+    return pixels        
+            
+            

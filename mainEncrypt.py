@@ -57,5 +57,8 @@ totalPixelsText = round(totalBitsText / 3 + 1 / 3)
 # --- Create Modified Pixels with the Text ---
 pixelModDec = modules.manipulation.manipulacion_texto(
     pixels, textBin, totalPixelsText)  # Modify pixels with the text
+print(
+    f"[INFO] Total of pixels for the modify text: {len(pixelModDec)} pixels")
+pixels=modules.createImg.final_pixels(pixels,pixelModDec,ancho)
 
 # --- Output Information ---
