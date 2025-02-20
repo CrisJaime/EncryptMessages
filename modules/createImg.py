@@ -81,7 +81,7 @@ def extraer_canales(image):
     return matriz, total_pixels, width, height
 
 
-def crear_imagen(pixels, imagen_original, ancho, alto):
+def crear_imagen(pixels, ancho, alto):
     """
     Creates and displays a new image using the processed pixels.
 
