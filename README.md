@@ -25,16 +25,25 @@ This project uses various techniques to hide encrypted messages in image files. 
 ## Modules
 
 ### Key Generation
-The `key` module handles the creation of a password for encrypting the text. The password is generated randomly, converted into ASCII values, and then into binary form.
+The `key.py` module handles the creation of a password for encrypting the text. The password is generated randomly, converted into ASCII values, and then into binary form.
 
 ### Image Processing
-The `processImg` module is responsible for loading and processing images. It extracts RGB channels from the image and converts them into a binary representation that can be manipulated.
+The `processImg.py` module is responsible for loading and processing images. It extracts RGB channels from the image and converts them into a binary representation that can be manipulated. It contains functions such as:
+- **cargar_imagen(nombre_archivo)**: Loads an image and handles errors if the file is not found.
+- **extraer_canales(imagen)**: Extracts RGB values from the image and organizes them in a matrix.
+- **crear_imagen(pixels, imagen_original, ancho, alto, conversiones)**: Creates a new image with modified pixel values and displays it.
 
 ### Binary Manipulation
-The `manipulation` module manipulates the binary data representing the password and message. It modifies the image's pixels by encoding the binary data (indicators, password, and message) into the image's pixel values.
+The `manipulation.py` module manipulates the binary data representing the password and message. It modifies the image's pixels by encoding the binary data (indicators, password, and message) into the image's pixel values. Some key functions include:
+- **separar_clave(var)**:  Extracts the key from the first three rows of a matrix.
+- **separar_contrasena(var, size)**: Extracts password blocks from a matrix. 
+- **manipular_indicadores(matrix, indicadores)**: Modifies a pixel matrix to store binary indicators.
+- **manipular_contrasena(matrix, contrasena, ancho)**:  Embeds a binary password into an image.
+- **manipulacion_texto(mat, mensaje, pixels)**: Embeds a message into an image.
+
 
 ### Image Creation
-The `createImg` module manages inserting the encrypted message and password into the image. It updates the pixel data of the image with the binary data of the message and password, then creates a new image with the modified pixel values.
+The `createImg.py` module manages inserting the encrypted message and password into the image. It updates the pixel data of the image with the binary data of the message and password, then creates a new image with the modified pixel values.
 
 ## How to Use
 
@@ -71,7 +80,6 @@ file
 │   │   └── img/
 │   │       └── ImagenModificada.jpg # Output 
 │   │   └── txt/
-│   │       └── cambios.txt          # Pixels Changes
 │   │       └── key.txt              # Key/Password
 modified image
 │
