@@ -48,5 +48,11 @@ def crear_archivo(contenido: List[str]) -> None:
 
     with open(file_path, 'w') as archivo:
         archivo.writelines(contenido)  # Write the lines to the file
-    print("[INFO] Password file 'key.txt' created successfully.")
-
+    print("[INFO] Password file 'key.txt' created successfully.")   
+    
+# Create a 'Llave.txt' file with a total of Pixels of the Text at the end
+def final_password(password:str,totalPixelsText:int):
+    extraChar='#'
+    finalPass=password+extraChar+str(totalPixelsText)
+    crear_archivo(finalPass)
+    return finalPass

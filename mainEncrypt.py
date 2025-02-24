@@ -1,88 +1,68 @@
-import time  # To measure execution time
-import modules  # Import custom modules for handling keys, images, and conversions
+import time  # Measure execution time
+import modules  # Import custom modules for key handling, image processing, and conversions
 
-# --- Measure program start time ---
-inicio = time.time()
+# --- Start execution time measurement ---
+start_time = time.time()
 
 # --- Password Generation ---
-keyLong = 30  # Password length
-# Create a random password with characters
-password = modules.key.crear_contrasena(keyLong)
-# Save the password in a text file
-keyFile = modules.key.crear_archivo(password)
-# Convert the password to binary
-binariPass = modules.convertions.char_to_bin(password)
+KEY_LENGTH = 30  # Define password length
+password = modules.key.crear_contrasena(KEY_LENGTH)  # Generate a random password
+binary_password = modules.convertions.char_to_bin(password)  # Convert password to binary
 
 # --- Image Processing ---
-nameImg = "data\\input\\img\\ImageTest.jpg"  # Path of the original image
-# Load the image from the file
-img = modules.processImg.cargar_imagen(nameImg)
-# Extract RGB channels and get image dimensions
-pixels, totalPixels, ancho, alto = modules.processImg.extraer_canales(img)
-# Convert RGB color values to binary
-binarys = modules.convertions.color_to_bin(pixels, ancho, alto)
+IMAGE_PATH = "data\input\img\ImageTest.jpg"  # Define image path
+image = modules.processImg.cargar_imagen(IMAGE_PATH)  # Load the image
+pixels, total_pixels, width, height = modules.processImg.extraer_canales(image)  # Extract RGB channels
+binary_pixels = modules.convertions.color_to_bin(pixels, width, height)  # Convert RGB values to binary
 
 # --- Binary Manipulation ---
-# Separate key indicators from the binary password
-indicadores = modules.manipulation.separar_clave(binariPass)
-# Split the binary password according to the specified length
-binPassSep = modules.manipulation.separar_contrasena(binariPass, keyLong)
-# Modify pixels with key indicators
-pixelsClaveModificada = modules.manipulation.manipular_indicadores(binarys, indicadores)
-# Create pixels with modified indicators
-pixelsIndicadores = modules.manipulation.crear_pixeles(pixelsClaveModificada)
-# Convert indicator pixels from binary to decimal
-pixelsIndicadoresDec = modules.convertions.bin_to_dec(pixelsIndicadores)
+key_indicators = modules.manipulation.separar_clave(binary_password)  # Extract key indicators
+split_binary_password = modules.manipulation.separar_contrasena(binary_password, KEY_LENGTH)  # Split password
+modified_key_pixels = modules.manipulation.manipular_indicadores(binary_pixels, key_indicators)  # Modify pixels
+indicator_pixels = modules.manipulation.crear_pixeles(modified_key_pixels)  # Create pixels with indicators
+indicator_pixels_dec = modules.convertions.bin_to_dec(indicator_pixels)  # Convert to decimal
 
-# --- Insert Password into the Image ---
-# Modify pixels with the binary password
-binPassMod = modules.manipulation.manipular_contrasena(binarys, binPassSep, ancho)
-# Create pixels with the modified password
-pixelsBinContra = modules.manipulation.crear_pixeles(binPassMod)
-# Convert password pixels from binary to decimal
-pixelsBinDec = modules.convertions.bin_to_dec(pixelsBinContra)
-# Combine indicator pixels with password pixels
-pixelsPassMod = pixelsIndicadoresDec + pixelsBinDec
-# Update the first 88 pixels with the password in the image
-pixels[0][0:88] = pixelsPassMod
+# --- Embed Password into Image ---
+modified_binary_password = modules.manipulation.manipular_contrasena(binary_pixels, split_binary_password, width)
+password_pixels = modules.manipulation.crear_pixeles(modified_binary_password)
+password_pixels_dec = modules.convertions.bin_to_dec(password_pixels)
+pixels_password_modified = indicator_pixels_dec + password_pixels_dec  # Combine indicators and password
+pixels[0][0:88] = pixels_password_modified  # Update first 88 pixels with password
 
 # --- Process Text to Encrypt ---
-# Read text to encrypt from a file
 with open('data/input/text/textEncrypt.txt', 'r', encoding='utf-8') as file:
-    textEncrypt = file.read()
-# Convert the text into a list of characters
-textToList = list(textEncrypt)
-# Convert characters to binary
-textBin = modules.convertions.char_to_bin(textToList)
-# Calculate the total number of bits of the text
-totalBitsText = len(textBin) * 8
-# Calculate the total number of pixels required to store the text
-totalPixelsText = round(totalBitsText / 3 + 1 / 3)
+    text_to_encrypt = file.read()  # Read text from file
 
-# --- Create Modified Pixels with the Text ---
-# Modify pixels to include the encrypted text
-pixelModDec = modules.manipulation.manipulacion_texto(pixels, textBin, totalPixelsText)
-# Generate the final image with modified pixels
-pixels = modules.createImg.final_pixels(pixels, pixelModDec, ancho)
+text_list = list(text_to_encrypt)  # Convert text to list of characters
+binary_text = modules.convertions.char_to_bin(text_list)  # Convert text to binary
 
-# --- Create Modified Image ---
-# Create a new image with modified pixels
-imgMod = modules.createImg.crear_imagen(pixels, ancho, alto)
-# Save the modified image to a file
-imgMod.save('data\\output\\img\\ImagenModificada.jpg')
+# Calculate required storage space
+total_text_bits = len(binary_text) * 8  # Total bits for text
+required_pixels = round(total_text_bits / 3 + 1 / 3)  # Pixels needed
+
+# --- Embed Text into Image ---
+modified_pixels_dec = modules.manipulation.manipulacion_texto(pixels, binary_text, required_pixels)
+pixels = modules.createImg.final_pixels(pixels, modified_pixels_dec, width)  # Update pixels
+
+# --- Generate and Save Modified Image ---
+modified_image = modules.createImg.crear_imagen(pixels, width, height)  # Create new image
+modified_image.save('data\output\img\ImagenModificada.jpg')  # Save output image
+
+# --- Generate Final Key ---
+final_password = modules.key.final_password(password, required_pixels)  # Generate final password
 
 # --- Output Information ---
 print("---" * 10)
-print(f"[INFO] Password in ASCII: {password}")
-print(f"[INFO] Total pixels: {totalPixels}")
+print(f"[INFO] Password in ASCII: {final_password}")
+print(f"[INFO] Total pixels: {total_pixels}")
 print(f"[INFO] Characters per row: {len(pixels) * 3 // 8}")
-print(f"[INFO] Rows in the image: {alto}")
-print(f"[INFO] Pixels of the password: {len(pixelsPassMod)}")
+print(f"[INFO] Rows in image: {height}")
+print(f"[INFO] Pixels used for password: {len(pixels_password_modified)}")
 print("---" * 10)
-print(f"[INFO] Text to encrypt: {textEncrypt}")
-print(f"[INFO] Total bits the text will use: {totalBitsText}")
-print(f"[INFO] Total pixels the text will use: {totalPixelsText}")
+print(f"[INFO] Text to encrypt: {text_to_encrypt}")
+print(f"[INFO] Total bits used for text: {total_text_bits}")
+print(f"[INFO] Total pixels used for text: {required_pixels}")
 
-# --- Measure execution time ---
-fin = time.time()
-print(f"[INFO] Time elapsed: {round(fin - inicio, 3)} sec")
+# --- End execution time measurement ---
+end_time = time.time()
+print(f"[INFO] Time elapsed: {round(end_time - start_time, 3)} sec")

@@ -17,17 +17,16 @@ def char_to_bin(text: str) -> list:
     """
     return [format(ord(c), '08b') for c in text]
 
-
 # Convert RGB colors to binary
-def color_to_bin(arr: list, ancho: int, alto: int) -> list:
+def color_to_bin(arr: list, width: int, height: int) -> list:
     """
     Converts a matrix of RGB colors (in decimal format) into a matrix of binary
     8-bit values for each component (R, G, B).
 
     Args:
         arr (list): Matrix of RGB colors with dimensions [height][width][3].
-        ancho (int): Image width in pixels.
-        alto (int): Image height in pixels.
+        width (int): Image width in pixels.
+        height (int): Image height in pixels.
 
     Returns:
         list: Matrix of binary values corresponding to each RGB component.
@@ -64,17 +63,17 @@ def bin_to_dec(arr: list) -> list:
     ]
 
 # Convert a list of matrices into a list of tuples
-def convert_to_duple(lista: list, ancho: int, alto: int) -> list:
+def convert_to_duple(matrix: list, width: int, height: int) -> list:
     """
     Converts a matrix of RGB values (or any nested matrix) into a flat list
     of tuples, where each tuple represents a pixel with its components.
 
     Args:
-        lista (list): Matrix of values with dimensions [height][width][3].
-        ancho (int): Matrix width in pixels.
-        alto (int): Matrix height in pixels.
+        matrix (list): Matrix of values with dimensions [height][width][3].
+        width (int): Matrix width in pixels.
+        height (int): Matrix height in pixels.
 
     Returns:
         list: Flat list of tuples (R, G, B) representing the matrix's pixels.
     """
-    return [tuple(lista[i][j]) for i in range(alto) for j in range(ancho)]
+    return [tuple(matrix[i][j]) for i in range(height) for j in range(width)]

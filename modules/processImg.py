@@ -1,7 +1,7 @@
 from PIL import Image
 import sys
 
-# Function to load an image
+
 def cargar_imagen(nombre_archivo: str):
     """
     Loads an image from a file and handles errors if the file is not found.
@@ -12,11 +12,8 @@ def cargar_imagen(nombre_archivo: str):
     Returns:
         Image.Image: Loaded image object if the file is found.
 
-    Error Handling:
-        - If the file does not exist, an error message is displayed, and the program exits.
-
-    Example:
-        cargar_imagen('image.jpg') -> Loads and returns the image in PIL.Image format.
+    Raises:
+        SystemExit: If the file does not exist, an error message is displayed, and the program exits.
     """
     try:
         imagen = Image.open(nombre_archivo)  # Opens the image file
@@ -26,7 +23,7 @@ def cargar_imagen(nombre_archivo: str):
         print(f'No image found with the name "{nombre_archivo}".')  # Error handling if the file is not found
         sys.exit(1)  # Exits the program with an error code
 
-# Extract RGB channels from an image
+
 def extraer_canales(imagen: Image.Image):
     """
     Extracts the RGB channels of each pixel in the image and organizes the values into a matrix.
@@ -40,11 +37,6 @@ def extraer_canales(imagen: Image.Image):
             - total_pixels (int): Total number of pixels in the image.
             - width (int): Image width in pixels.
             - height (int): Image height in pixels.
-
-    Example:
-        extraer_canales(image) ->
-        matrix = [[[R1, G1, B1], [R2, G2, B2], ...], ...]
-        total_pixels = width * height
     """
     width, height = imagen.size  # Get the image's width and height
     image_pixels = imagen.load()  # Load the image pixels into memory
@@ -55,10 +47,9 @@ def extraer_canales(imagen: Image.Image):
         for y in range(height)  # Iterate through each row (image height)
     ]
     total_pixels = width * height  # Calculate the total number of pixels
-    # print(f"[INFO] First 8 pixels before password indicators: \n{matrix[0][:8]}")
     return matrix, total_pixels, width, height
 
-# Create and display a new image from processed pixels
+
 def crear_imagen(pixels, imagen_original: Image.Image, ancho: int, alto: int, conversiones):
     """
     Creates a new image using processed pixel values and displays it alongside the original image.
@@ -72,14 +63,6 @@ def crear_imagen(pixels, imagen_original: Image.Image, ancho: int, alto: int, co
 
     Returns:
         Image.Image: New image created from the provided pixel values.
-
-    Process:
-        - Converts the list of pixels into a list of tuples (format [R, G, B]).
-        - Creates a new image with the same size and applies the new pixels.
-        - Displays both the new image and the original image.
-
-    Example:
-        new_image = crear_imagen(pixels, image, 200, 300, conversiones)
     """
     # Convert the list of pixels into RGB tuples using the convertToDuple function from the 'conversiones' module
     pixels_tuples = conversiones.convertToDuple(pixels, ancho, alto)
