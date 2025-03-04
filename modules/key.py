@@ -56,3 +56,7 @@ def final_password(password:str,totalPixelsText:int):
     finalPass=password+extraChar+str(totalPixelsText)
     crear_archivo(finalPass)
     return finalPass
+
+def separate_password(password:str) -> List:
+    indicators,validPass,colums=password[0:3],password[3:33],password[34:]
+    return [indicators,validPass,int(colums)]

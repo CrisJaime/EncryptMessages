@@ -5,10 +5,11 @@ nameImgMod = "data\\output\\img\\ImagenModificada.jpg"
 imgMod = modules.processImg.cargar_imagen(nameImgMod)
 pixels, _, ancho, alto = modules.processImg.extraer_canales(imgMod)
 
-# --- Extract Password ---
-pixelsClaveExtraida = pixels[0][0:88]  # Extract the first 88 pixels
-chunks = [pixelsClaveExtraida[i] for i in range(0, len(pixelsClaveExtraida))]
-flatPixels = [value for sublist in chunks for value in sublist]
-flatPixelsBin=modules.convertions.dec_to_bin(flatPixels)
-lsbPixels= modules.manipulation.lsb_values(flatPixelsBin)
-print(chunks)
+# --- Password ---
+with open("data\\output\\txt\\key.txt", 'r', encoding='utf-8') as passFull:
+    password = passFull.read() 
+passDivide=modules.key.separate_password(password)
+indicatorsPass=modules.convertions.char_to_bin(passDivide[0])
+passwordBin=modules.convertions.char_to_bin(passDivide[1])
+rows=passDivide[2]
+
